@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<meta name="description" content="" />
+		<title>⚠️ Devopsdays Events 🗺️</title>
+		<script>
+		(function() {
+			// your page initialization code here
+			// the DOM will be available here
+			fetch('./devopsdays-events.json')
+				.then(response => response.json())
+				.then(function(payload){
+					const events = payload?.data || [];
+					let rootNode = document.querySelector('#event-item-container');
+					events.forEach(function(item) {
+						let eventNode = document.createElement('div');
+						eventNode.innerHTML = '<div class="event-item">'
+							+ '<h3><span class="event-location">' + item.location + '</span> / ' + item.date + '</h3>'
+							+ '<img src="' + item.logo_url + '" alt="Devopsdays '+ item.location + '">'
+							+ '</div>';
+						rootNode.appendChild(eventNode);
+					});
+				})
+		})();
+		</script>
+		<style>
+			html,
+			body {height:100%; padding:0; margin:0; width:100%;}
+			body {display:flex; flex-direction:column;}
+			#main {flex-grow:1;}
+
+			/* optional */
+			header {min-height:100px; }
+			/* #main {} */
+			footer {min-height:50px; text-align: center; font-size: 0.8em;}
+			#event-item-container {margin: 0 auto; max-width: 60%; text-align: center;}
+			.event-item { 
+				border: 2px solid grey; 
+				border-radius: 2px; 
+				margin: 20px 0;
+				padding: 10px auto;
+			}
+			.event-location { text-transform: uppercase;}
+		</style>
+	</head>
+	<body>
+
+		<header style="text-align: center; margin: 10px auto;"><h1># ⚠️ Devopsdays Events 🗺️</h1><hr></header>
+		<div id="main" role="main">
+			<section id="event-item-container">
+
+			</section>
+		</div>
+		<footer>&copy; GKNB Consulting</footer>
+	</body>
+</html>
