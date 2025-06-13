@@ -8,22 +8,13 @@ jobs:
   deploy:
     runs-on: ubuntu-24.04
     steps:
-      - name: Cloning repo
+      - name: Clone repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: SSH check
-        uses: appleboy/ssh-action@v1
+      - name: Push to dokku
+        uses: dokku/github-action@master
         with:
-          host: ${{ secrets.DOKKU_HOST }}
-          username: ${{ secrets.DOKKU_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          script: whoami
-
-#      - name: Push to dokku
-#        uses: dokku/github-action@master
-#        with:
-#          git_remote_url: ${{ vars.DOKKU_APP_NAME}}
-#          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          git_remote_url: ${{ vars.DOKKU_GIT_REMOTE_URL}}
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
