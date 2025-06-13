@@ -1,28 +1,28 @@
-#
+
 name: continuous-delivery
 
 # This workflow runs when any of the following occur:
-# - A push is made to a branch called `main` or `seed`
-# - A tag starting with "v" is created
+# - A push is made to any branch
+# - A tag formatted as "*.*.*" is created
 # - A pull request is created or updated
 on:
   push:
-    branches: [ "*" ]
+    branches: ["*"]
     # Publish semver tags as releases.
-    tags: [ '*.*.*' ]
+    tags: ["*.*.*"]
   pull_request:
 
 env:
   REGISTRY: ghcr.io
-#
+
 jobs:
-  # This pushes the image to GitHub Packages.
-  push:
+
+  build:
     runs-on: ubuntu-latest
     permissions:
       packages: write
       contents: read
-      #
+
     steps:
       - name: Get repository name
         run: |
@@ -36,11 +36,10 @@ jobs:
 
       - name: Log in to registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-        #
+
       - name: Push image
         run: |
           IMAGE_ID=${{ REGISTRY }}/${{ IMAGE_REPO }}/$IMAGE_NAME
-
           # This changes all uppercase characters to lowercase.
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
           # This strips the git ref prefix from the version.
